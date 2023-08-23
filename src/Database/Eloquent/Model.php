@@ -279,7 +279,6 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     {
         /** @var Connection $connection */
         $connection = $this->getConnection();
-
         return new QueryBuilder($connection, new Grammar());
     }
 

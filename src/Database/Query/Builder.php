@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Bavix\LaravelClickHouse\Database\Query;
 
-use Bavix\LaravelClickHouse\Database\Connection;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Traits\Macroable;
 use Tinderbox\Clickhouse\Common\Format;
+use Tinderbox\ClickhouseBuilder\Integrations\Laravel\Connection;
 use Tinderbox\ClickhouseBuilder\Query\BaseBuilder;
 use Tinderbox\ClickhouseBuilder\Query\Grammar;
 
