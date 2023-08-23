@@ -18,7 +18,7 @@ class Builder extends BaseBuilder
         __call as macroCall;
     }
 
-    protected $connection;
+    protected Connection $connection;
 
     public function __construct(
         Connection $connection,
@@ -32,8 +32,6 @@ class Builder extends BaseBuilder
      * Perform compiled from builder sql query and getting result.
      *
      * @throws \Tinderbox\Clickhouse\Exceptions\ClientException
-     *
-     * @return Collection
      */
     public function get(): Collection
     {
@@ -50,13 +48,9 @@ class Builder extends BaseBuilder
      * Performs compiled sql for count rows only. May be used for pagination
      * Works only without async queries.
      *
-     * @param string $column Column to pass into count() aggregate function
-     *
      * @throws \Tinderbox\Clickhouse\Exceptions\ClientException
-     *
-     * @return int
      */
-    public function count($column = '*'): int
+    public function count(string $column = '*'): int
     {
         $builder = $this->getCountQuery($column);
         $result = $builder->get();
@@ -72,20 +66,16 @@ class Builder extends BaseBuilder
      * Perform query and get first row.
      *
      * @throws \Tinderbox\Clickhouse\Exceptions\ClientException
-     *
-     * @return mixed|null
      */
-    public function first()
+    public function first(): mixed
     {
         return $this->get()->first();
     }
 
     /**
      * Makes clean instance of builder.
-     *
-     * @return self
      */
-    public function newQuery(): self
+    public function newQuery(): static
     {
         return new static($this->connection, $this->grammar);
     }
@@ -93,14 +83,7 @@ class Builder extends BaseBuilder
     /**
      * Insert in table data from files.
      *
-     * @param array  $columns
-     * @param array  $files
-     * @param string $format
-     * @param int    $concurrency
-     *
      * @throws \Tinderbox\Clickhouse\Exceptions\ClientException
-     *
-     * @return array
      */
     public function insertFiles(array $columns, array $files, string $format = Format::CSV, int $concurrency = 5): array
     {
@@ -115,10 +98,6 @@ class Builder extends BaseBuilder
 
     /**
      * Performs insert query.
-     *
-     * @param array $values
-     *
-     * @return bool
      */
     public function insert(array $values): bool
     {
@@ -143,9 +122,6 @@ class Builder extends BaseBuilder
         );
     }
 
-    /**
-     * @return Connection
-     */
     public function getConnection(): Connection
     {
         return $this->connection;
