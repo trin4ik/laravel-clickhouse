@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Bavix\LaravelClickHouse\Database\Eloquent;
 
 use BadMethodCallException;
-use Bavix\LaravelClickHouse\Database\Query\Builder as QueryBuilder;
 use Closure;
+use Bavix\LaravelClickHouse\Database\Query\Builder as QueryBuilder;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Concerns\BuildsQueries;

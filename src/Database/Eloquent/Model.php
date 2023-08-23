@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Bavix\LaravelClickHouse\Database\Eloquent;
 
 use ArrayAccess;
-use Illuminate\Support\Arr;
 use JsonSerializable;
 use Bavix\LaravelClickHouse\Database\Connection;
 use Illuminate\Contracts\Events\Dispatcher;
