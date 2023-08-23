@@ -77,6 +77,13 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     public bool $wasRecentlyCreated = false;
 
     /**
+     * Indicates if an exception should be thrown when trying to access a missing attribute on a retrieved model.
+     *
+     * @var bool
+     */
+    protected static bool $modelsShouldPreventAccessingMissingAttributes = false;
+
+    /**
      * Indicates if the model exists.
      */
     public bool $exists = false;
@@ -529,6 +536,14 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     public function offsetUnset(mixed $offset): void
     {
         unset($this->attributes[$offset]);
+    }
+
+    /**
+     * Determine if accessing missing attributes is disabled.
+     */
+    public static function preventsAccessingMissingAttributes(): bool
+    {
+        return static::$modelsShouldPreventAccessingMissingAttributes;
     }
 
     /**
