@@ -561,7 +561,8 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
         $this->offsetUnset($key);
     }
 
-    public function create (mixed $values): static|false {
+    public static function create (mixed $values): static|false {
+        $model = new static();
 
         if (empty($values)) {
             return false;
@@ -571,14 +572,14 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
             $values = [$values];
         }
 
-        $insert = $this->newQuery()->insert($values);
+        $insert = $model->newQuery()->insert($values);
 
         if ($insert) {
-            $this->fill($values);
-            $this->wasRecentlyCreated = true;
-            $this->exists = true;
+            $model->fill($values);
+            $model->wasRecentlyCreated = true;
+            $model->exists = true;
 
-            return $this;
+            return $model;
         }
 
         return false;
