@@ -856,6 +856,19 @@ class Builder
         return $results;
     }
 
+    /**
+     * Save a new model and return the instance.
+     *
+     * @param  array  $attributes
+     * @return \Illuminate\Database\Eloquent\Model|$this
+     */
+    public function create(array $attributes = [])
+    {
+        return tap($this->newModelInstance($attributes), function ($instance) {
+            $instance->save();
+        });
+    }
+
     public function getQuery(): QueryBuilder
     {
         return $this->query;

@@ -561,31 +561,6 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
         $this->offsetUnset($key);
     }
 
-    public static function create (mixed $values): static|false
-    {
-        $model = new static();
-
-        if (empty($values)) {
-            return false;
-        }
-
-        if (!is_array(reset($values))) {
-            $values = [$values];
-        }
-
-        $insert = $model->newQuery()->insert($values);
-
-        if ($insert) {
-            $model = static::find($values[0][$model->getKeyName()]);
-            $model->wasRecentlyCreated = true;
-            $model->exists = true;
-
-            return $model;
-        }
-
-        return false;
-    }
-
     /**
      * Handle dynamic method calls into the model.
      */
