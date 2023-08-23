@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Bavix\LaravelClickHouse\Database\Eloquent;
 
 use ArrayAccess;
+use Illuminate\Support\Arr;
+use JsonSerializable;
 use Bavix\LaravelClickHouse\Database\Connection;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Support\Arrayable;
@@ -19,7 +21,6 @@ use Illuminate\Database\Eloquent\Concerns\HidesAttributes;
 use Illuminate\Database\Eloquent\JsonEncodingException;
 use Illuminate\Database\Eloquent\MassAssignmentException;
 use Illuminate\Support\Str;
-use JsonSerializable;
 use Tinderbox\ClickhouseBuilder\Query\Grammar;
 use Bavix\LaravelClickHouse\Database\Query\Builder as QueryBuilder;
 
@@ -71,9 +72,14 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     protected int $perPage = 15;
 
     /**
+     * Indicates if the model was inserted during the current request lifecycle.
+     */
+    public bool $wasRecentlyCreated = false;
+
+    /**
      * Indicates if the model exists.
      */
-    public bool$exists = false;
+    public bool $exists = false;
 
     /**
      * The connection resolver instance.
@@ -539,6 +545,29 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     public function __unset(string $key): void
     {
         $this->offsetUnset($key);
+    }
+
+    public function create (mixed $values): static|false {
+
+        if (empty($values)) {
+            return false;
+        }
+
+        if (!is_array(reset($values))) {
+            $values = [$values];
+        }
+
+        $insert = $this->newQuery()->insert($values);
+
+        if ($insert) {
+            $this->fill($values);
+            $this->wasRecentlyCreated = true;
+            $this->exists = true;
+
+            return $this;
+        }
+
+        return false;
     }
 
     /**

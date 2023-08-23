@@ -101,14 +101,6 @@ class Builder extends BaseBuilder
      */
     public function insert(array $values): bool
     {
-        if (empty($values)) {
-            return false;
-        }
-
-        if (!is_array(reset($values))) {
-            $values = [$values];
-        }
-
         // Here, we will sort the insert keys for every record so that each insert is
         // in the same order for the record. We need to make sure this is the case
         // so there are not any errors or problems when inserting these records.
