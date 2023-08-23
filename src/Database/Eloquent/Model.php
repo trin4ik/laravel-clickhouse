@@ -38,7 +38,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
      *
      * @var string
      */
-    protected $connection = 'bavix::clickhouse';
+    protected $connection = 'clickhouse';
 
     /**
      * The table associated with the model.

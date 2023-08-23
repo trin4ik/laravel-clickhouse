@@ -28,7 +28,7 @@ class ClickHouseServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->resolving('db', static function (DatabaseManager $db) {
-            $db->extend('bavix::clickhouse', static function ($config, $name) {
+            $db->extend('clickhouse', static function ($config, $name) {
                 return new Connection(\array_merge($config, \compact('name')));
             });
         });
