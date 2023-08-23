@@ -572,7 +572,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
             $values = [$values];
         }
 
-        $insert = $model->newQuery()->insert([$values]);
+        $insert = $model->newQuery()->insert($values);
 
         if ($insert) {
             $model->fill($values);
