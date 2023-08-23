@@ -289,7 +289,6 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
 
     protected function newBaseQueryBuilder(): QueryBuilder
     {
-        /** @var Connection $connection */
         $connection = $this->getConnection();
         return new QueryBuilder($connection, new Grammar());
     }
@@ -337,7 +336,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Get the database connection for the model.
      */
-    public function getConnection(): \Illuminate\Database\Connection
+    public function getConnection(): Connection
     {
         return static::resolveConnection($this->getConnectionName());
     }
