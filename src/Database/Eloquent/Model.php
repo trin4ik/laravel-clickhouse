@@ -211,7 +211,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
         // This method just provides a convenient way for us to generate fresh model
         // instances of this current model. It is particularly useful during the
         // hydration of new objects via the Eloquent query builder instances.
-        $model = new static($attributes);
+        $model = new static((array)$attributes);
 
         $model->exists = $exists;
 
