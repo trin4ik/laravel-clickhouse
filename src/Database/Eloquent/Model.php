@@ -576,7 +576,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
         $insert = $model->newQuery()->insert($values);
 
         if ($insert) {
-            $model = static::find($values[0][$model->getKey()]);
+            $model = static::find($values[0][$model->getKeyName()]);
             $model->wasRecentlyCreated = true;
             $model->exists = true;
 
