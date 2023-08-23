@@ -7,8 +7,8 @@ namespace Bavix\LaravelClickHouse\Database\Query;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Traits\Macroable;
+use Bavix\LaravelClickHouse\Database\Connection;
 use Tinderbox\Clickhouse\Common\Format;
-use Tinderbox\ClickhouseBuilder\Integrations\Laravel\Connection;
 use Tinderbox\ClickhouseBuilder\Query\BaseBuilder;
 use Tinderbox\ClickhouseBuilder\Query\Grammar;
 
