@@ -38,7 +38,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * The connection name for the model.
      */
-    protected string $connection = 'clickhouse';
+    protected string $connection = 'bavix::clickhouse';
 
     /**
      * The table associated with the model.
@@ -289,6 +289,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
 
     protected function newBaseQueryBuilder(): QueryBuilder
     {
+        /** @var Connection $connection */
         $connection = $this->getConnection();
         return new QueryBuilder($connection, new Grammar());
     }
@@ -336,7 +337,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Get the database connection for the model.
      */
-    public function getConnection(): Connection
+    public function getConnection(): ConnectionInterface
     {
         return static::resolveConnection($this->getConnectionName());
     }
@@ -362,7 +363,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Resolve a connection instance.
      */
-    public static function resolveConnection(?string $connection = null): Connection|ConnectionInterface
+    public static function resolveConnection(?string $connection = null): ConnectionInterface
     {
         return static::getConnectionResolver()->connection($connection);
     }
