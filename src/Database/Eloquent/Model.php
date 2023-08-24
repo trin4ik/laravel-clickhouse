@@ -574,6 +574,6 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
      */
     public static function __callStatic (string $method, array $parameters): mixed
     {
-        return (new static())->$method(...$parameters);
+        return (new static)->$method(...$parameters);
     }
 }

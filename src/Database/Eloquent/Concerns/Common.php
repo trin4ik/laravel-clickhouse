@@ -15,6 +15,6 @@ trait Common
      */
     public function save(array $options = []): bool
     {
-        return static::insert($this->toArray());
+        return static::insert($this->getAttributes());
     }
 }

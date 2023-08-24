@@ -883,32 +883,24 @@ class Builder
 
     /**
      * Get a base query builder instance.
-     *
-     * @return \Illuminate\Database\Query\Builder
      */
-    public function toBase ()
+    public function toBase (): QueryBuilder
     {
         return $this->applyScopes()->getQuery();
     }
 
     /**
      * Get the relationships being eagerly loaded.
-     *
-     * @return array
      */
-    public function getEagerLoads ()
+    public function getEagerLoads (): array
     {
         return $this->eagerLoad;
     }
 
     /**
      * Set the relationships being eagerly loaded.
-     *
-     * @param array $eagerLoad
-     *
-     * @return $this
      */
-    public function setEagerLoads (array $eagerLoad)
+    public function setEagerLoads (array $eagerLoad): static
     {
         $this->eagerLoad = $eagerLoad;
 
