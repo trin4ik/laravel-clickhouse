@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace Bavix\LaravelClickHouse\Database\Eloquent;
 
 use ArrayAccess;
+use Illuminate\Contracts\Routing\UrlRoutable;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use JsonSerializable;
 use Bavix\LaravelClickHouse\Database\Connection;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -26,7 +30,7 @@ use Bavix\LaravelClickHouse\Database\Query\Builder as QueryBuilder;
 /**
  * Class Model.
  */
-abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializable
+abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializable, UrlRoutable
 {
     use Concerns\HasAttributes;
     use Concerns\Common;
@@ -486,6 +490,93 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
         $this->perPage = $perPage;
 
         return $this;
+    }
+
+    /**
+     * Get the value of the model's route key.
+     */
+    public function getRouteKey(): mixed
+    {
+        return $this->getAttribute($this->getRouteKeyName());
+    }
+
+    /**
+     * Get the route key for the model.
+     */
+    public function getRouteKeyName(): string
+    {
+        return $this->getKeyName();
+    }
+
+    /**
+     * Retrieve the model for a bound value.
+     */
+    public function resolveRouteBinding(mixed $value, ?string $field = null): ?Model
+    {
+        return $this->resolveRouteBindingQuery($this, $value, $field)->first();
+    }
+
+    /**
+     * Retrieve the model for a bound value.
+     */
+    public function resolveSoftDeletableRouteBinding(mixed $value, ?string $field = null): ?Model
+    {
+        return $this->resolveRouteBindingQuery($this, $value, $field)->withTrashed()->first();
+    }
+
+    /**
+     * Retrieve the child model for a bound value.
+     *
+     * @param string $childType
+     * @param mixed $value
+     * @param string|null $field
+     */
+    public function resolveChildRouteBinding($childType, $value, $field): ?Model
+    {
+        return $this->resolveChildRouteBindingQuery($childType, $value, $field)->first();
+    }
+
+    /**
+     * Retrieve the child model for a bound value.
+     */
+    public function resolveSoftDeletableChildRouteBinding(string $childType, mixed $value, ?string $field = null): ?Model
+    {
+        return $this->resolveChildRouteBindingQuery($childType, $value, $field)->withTrashed()->first();
+    }
+
+    /**
+     * Retrieve the child model query for a bound value.
+     */
+    protected function resolveChildRouteBindingQuery(string $childType, mixed $value, ?string $field = null): Relation|Model
+    {
+        $relationship = $this->{$this->childRouteBindingRelationshipName($childType)}();
+
+        $field = $field ?: $relationship->getRelated()->getRouteKeyName();
+
+        if ($relationship instanceof HasManyThrough ||
+            $relationship instanceof BelongsToMany) {
+            $field = $relationship->getRelated()->getTable().'.'.$field;
+        }
+
+        return $relationship instanceof Model
+            ? $relationship->resolveRouteBindingQuery($relationship, $value, $field)
+            : $relationship->getRelated()->resolveRouteBindingQuery($relationship, $value, $field);
+    }
+
+    /**
+     * Retrieve the child route model binding relationship name for the given child type.
+     */
+    protected function childRouteBindingRelationshipName(string $childType): string
+    {
+        return Str::plural(Str::camel($childType));
+    }
+
+    /**
+     * Retrieve the model for a bound value.
+     */
+    public function resolveRouteBindingQuery(Relation|Model $query, mixed $value, ?string $field = null): Relation|Model
+    {
+        return $query->where($field ?? $this->getRouteKeyName(), $value);
     }
 
     /**
