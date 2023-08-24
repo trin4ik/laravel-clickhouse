@@ -510,8 +510,11 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
 
     /**
      * Retrieve the model for a bound value.
+     *
+     * @param mixed $value
+     * @param string|null $field
      */
-    public function resolveRouteBinding(mixed $value, ?string $field = null): ?Model
+    public function resolveRouteBinding($value, $field = null): ?Model
     {
         return $this->resolveRouteBindingQuery($this, $value, $field)->first();
     }
