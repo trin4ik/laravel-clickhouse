@@ -577,7 +577,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Retrieve the model for a bound value.
      */
-    public function resolveRouteBindingQuery(Relation|Model $query, mixed $value, ?string $field = null): Relation|Model
+    public function resolveRouteBindingQuery(Relation|Model $query, mixed $value, ?string $field = null): Builder
     {
         return $query->where($field ?? $this->getRouteKeyName(), $value);
     }
